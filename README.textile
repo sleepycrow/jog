@@ -2,6 +2,8 @@ h1. Jog - A highly configurable sprint mod for minetest with an API.
 
 Allows players to sprint (duh!) by holding down the _E_ key. Jog requires the "hudbars":https://forum.minetest.net/viewtopic.php?f=11&t=11153 mod.
 
+License: CC0 (see LICENSE file)
+
 h2. API
 
 Jog offers a small, simple API. The following functions are available:
