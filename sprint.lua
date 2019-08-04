@@ -5,7 +5,7 @@ local hudbar_identifier = "stamina"
 -- register a hudbar
 hb.register_hudbar(hudbar_identifier, 0xFFFFFF, "Stamina",
 	{ bar = "stamina_bar.png", icon = "stamina_icon.png" },
-	SPRINT_STAMINA, SPRINT_STAMINA, jog.hide_hudbar)
+	0, jog.max_stamina, jog.hide_hudbar)
 
 -- add a player to players on join
 minetest.register_on_joinplayer(function(player)
