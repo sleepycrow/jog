@@ -4,9 +4,9 @@
 
 jog = {}
 
-local own_modname = minetest.get_current_modname()
-local own_modpath = minetest.get_modpath(own_modname)
+jog.own_modname = minetest.get_current_modname()
+jog.own_modpath = minetest.get_modpath(jog.own_modname)
 
-dofile(own_modpath .. "/settings.lua")
-dofile(own_modpath .. "/sprint.lua")
-dofile(own_modpath .. "/api.lua")
+dofile(jog.own_modpath .. "/settings.lua")
+dofile(jog.own_modpath .. "/sprint.lua")
+dofile(jog.own_modpath .. "/api.lua")

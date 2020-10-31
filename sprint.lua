@@ -1,35 +1,32 @@
+local hud = dofile(jog.own_modpath .. "/hud.lua")
+
 jog.players = {}
-
-local hudbar_identifier = "stamina"
-
--- register a hudbar
-hb.register_hudbar(hudbar_identifier, 0xFFFFFF, "Stamina",
-	{ bar = "stamina_bar.png", icon = "stamina_icon.png" },
-	0, jog.max_stamina, jog.hide_hudbar)
 
 -- add a player to players on join
 minetest.register_on_joinplayer(function(player)
     local playername = player:get_player_name()
-    
+
     jog.players[playername] = {
         sprinting = false,
         max_stamina = jog.max_stamina,
         stamina = jog.max_stamina
     }
 
-    hb.init_hudbar(player, hudbar_identifier, jog.players[playername].stamina, jog.players[playername].max_stamina)
+    hud.init(player)
 end)
 
 -- remove a player from players on leave
 minetest.register_on_leaveplayer(function(player)
     local playername = player:get_player_name()
     jog.players[playername] = nil
+
+    hud.remove(player)
 end)
 
 -- replenish stamina on death
 minetest.register_on_dieplayer(function(player)
     local playername = player:get_player_name()
-    
+
     if jog.players[playername] then
         jog.players[playername].stamina = jog.players[playername].max_stamina
     end
@@ -47,7 +44,7 @@ minetest.register_globalstep(function(dtime)
             playerinfo.sprinting = false
 
             if player:get_player_control()['aux1'] then
-            
+
                 -- if player wants to sprint and has stamina, set sprinting to true and drain stamina
                 if playerinfo.stamina > 0 then
                     playerinfo.sprinting = true
@@ -83,26 +80,11 @@ minetest.register_globalstep(function(dtime)
                 })
             end
 
-            -- show/hide hudbar
-            if jog.hide_hudbar then
-                local hudbar_hidden = hb.get_hudbar_state(player, hudbar_identifier)["hidden"]
-
-                if hudbar_hidden then
-                    if playerinfo.sprinting or playerinfo.stamina < playerinfo.max_stamina then
-                        hb.unhide_hudbar(player, hudbar_identifier)
-                    end
-                else
-                    if playerinfo.stamina >= playerinfo.max_stamina then
-                        hb.hide_hudbar(player, hudbar_identifier)
-                    end
-                end
-            end
-
-            -- update hudbar
-            hb.change_hudbar(player, hudbar_identifier, math.floor(playerinfo.stamina + 0.5), math.floor(playerinfo.max_stamina + 0.5))
-
             -- commit changes to players[]
             jog.players[playername] = playerinfo
+
+            -- update hud
+            hud.update(player)
 
         end
 
